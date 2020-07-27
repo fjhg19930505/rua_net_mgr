@@ -4,7 +4,9 @@ use crate::values::{NetResult, make_extension_error};
 use std::ops::Add;
 
 fn get_msg_head_fill() -> VarList {
-    VarList::init(vec![0 as u32, 0 as u16, 0 as u32, 0 as u16])
+    let mut head_msg = VarList::new();
+    head_msg = head_msg + 0 as u32 + 0 as u16 + 0 as u32 + 0 as u16;
+    head_msg
 }
 
 enum MsgIndex {
@@ -71,7 +73,7 @@ impl NetMsg {
         let cookie: u32 = var_list.get(MsgIndex::MsgIndexCookie.into());
         let msg_type: u16 = var_list.get(MsgIndex::MsgIndexMsgType.into());
         if data.get_count() != length as usize {
-            println!("data.len() = {:?}, length = {:?}", data.len(), length);
+            println!("data.len() = {:?}, length = {:?}", data.get_count(), length);
             return Err(make_extension_error("data length not match", None));
         }
         let pack_name: String = var_list.get(MsgIndex::MsgIndexMsgData.into());
