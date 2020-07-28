@@ -17,6 +17,12 @@ enum MsgIndex {
     MsgIndexMsgData,
 }
 
+impl Into<usize> for MsgIndex {
+    fn into(self) -> usize {
+        self as usize
+    }
+}
+
 pub struct NetMsg {
     var_list: VarList,
     seq_fd: u16,
@@ -61,7 +67,8 @@ impl NetMsg {
     }
 
     pub fn new_by_data(data: VarList) -> NetResult<NetMsg> {
-        if data.get_count() < get_msg_head_fill().get_count() {
+        let data_size = data.get_count();
+        if data_size < get_msg_head_fill().get_count() {
             return Err(make_extension_error("data len too small", None));
         }
 
@@ -72,8 +79,8 @@ impl NetMsg {
         let seq_fd: u16 = var_list.get(MsgIndex::MsgIndexSeqFd.into());
         let cookie: u32 = var_list.get(MsgIndex::MsgIndexCookie.into());
         let msg_type: u16 = var_list.get(MsgIndex::MsgIndexMsgType.into());
-        if data.get_count() != length as usize {
-            println!("data.len() = {:?}, length = {:?}", data.get_count(), length);
+        if data_size != length as usize {
+            println!("data.len() = {:?}, length = {:?}", data_size, length);
             return Err(make_extension_error("data length not match", None));
         }
         let pack_name: String = var_list.get(MsgIndex::MsgIndexMsgData.into());

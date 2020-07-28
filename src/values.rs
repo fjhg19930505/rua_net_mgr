@@ -1,7 +1,8 @@
 use std::error;
 use std::fmt;
 use std::io;
-use td_rp::RpError;
+use std::fmt::Display;
+use rua_value_list::RpError;
 
 /// An enum of all error kinds.
 #[derive(PartialEq, Eq, Copy, Clone, Debug)]
