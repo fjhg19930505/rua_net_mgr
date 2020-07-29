@@ -4,12 +4,14 @@ pub struct NetConfig;
 static mut el: *mut Config = 0 as *mut _;
 
 impl NetConfig {
-    pub unsafe fn instance() -> &'static mut Config {
-        if el == 0 as *mut _ {
-            el = Box::into_raw(Box::new(C))
-        }
+    pub fn instance() -> &'static mut Config {
+        unsafe {
+            if el == 0 as *mut _ {
+                el = Box::into_raw(Box::new(C))
+            }
 
-        &mut *el
+            &mut *el
+        }
     }
 
     pub fn change_instance(field: &str, proto: &str) -> bool {
